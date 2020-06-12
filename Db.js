@@ -11,8 +11,9 @@
 function indexedDBObj(){
     
     this.DB_NAME = 'mabase';
+    this.DB_VERSION = 1;
 
-    this.parameters = [
+    this.init_parameters = [
         { ///////////////////////////////// JOUR
             store : [ 'jour', { keyPath: 'id', autoIncrement: true } ],
             index : [
@@ -67,11 +68,11 @@ function indexedDBObj(){
     this.install = function() {
         // Ouvrir la base de données
         // Si elle n'existe pas, elle est créé
-        let request = indexedDB.open(this.DB_NAME);
+        let request = indexedDB.open(this.DB_NAME, this.DB_VERSION);
 
         request.onupgradeneeded = () => {
             let db = request.result;
-            for(let param of this.parameters){
+            for(let param of this.init_parameters){
                 // Create store
                 const store = db.createObjectStore(...param.store);
                 // Create index
@@ -86,12 +87,12 @@ function indexedDBObj(){
             db.close();
         }
     }
-    this.install();
+    // this.install();
     
     /** CREATE */
     this.set = function(table = "", data = {}) {
         return new Promise((resolve, reject)=>{
-            let request = indexedDB.open(this.DB_NAME);
+            let request = indexedDB.open(this.DB_NAME, this.DB_VERSION);
             request.onsuccess = function () {
                 let db = request.result;
                 let transaction = db.transaction(table, 'readwrite');
@@ -113,7 +114,7 @@ function indexedDBObj(){
     /** READ */
     this.get = function (table = "", key = "", store_index = 'by_id', position ='current') {
         return new Promise((resolve, reject)=>{
-            let request = indexedDB.open(this.DB_NAME);
+            let request = indexedDB.open(this.DB_NAME, this.DB_VERSION);
             request.onsuccess = function () {
                 let db = request.result;
                 let transaction = db.transaction(table, 'readonly');
@@ -152,7 +153,7 @@ function indexedDBObj(){
 
     this.getAll = function(table = "", store_index = "by_id") {
         return new Promise((resolve, reject)=>{
-            let request = indexedDB.open(this.DB_NAME);
+            let request = indexedDB.open(this.DB_NAME, this.DB_VERSION);
             request.onsuccess = function () {
                 let db = request.result;
                 let transaction = db.transaction(table, 'readonly');
@@ -186,7 +187,7 @@ function indexedDBObj(){
   
     this.getFrom = function (table = "", key = "", store_index = 'by_id', direction = 'next') { 
         return new Promise((resolve, reject) => {
-            let request = indexedDB.open(this.DB_NAME);
+            let request = indexedDB.open(this.DB_NAME, this.DB_VERSION);
 
             request.onsuccess = function () {
                 let db = request.result;
@@ -227,7 +228,7 @@ function indexedDBObj(){
     /** UPDATE */
     this.put = function (table = "", key = "", data = {}, store_index = 'by_id') {
         return new Promise((resolve, reject)=>{
-            let request = indexedDB.open(this.DB_NAME);
+            let request = indexedDB.open(this.DB_NAME, this.DB_VERSION);
             request.onsuccess = function () {
                 let db = request.result;
                 let transaction = db.transaction(table, 'readwrite');
@@ -250,7 +251,7 @@ function indexedDBObj(){
     /** DELETE */
     this.delete = function (table = "", key = "", store_index = 'by_id') {
         return new Promise((resolve, reject)=>{
-            let request = indexedDB.open(this.DB_NAME);
+            let request = indexedDB.open(this.DB_NAME, this.DB_VERSION);
             request.onsuccess = function () {
                 let db = request.result;
                 let transaction = db.transaction(table, 'readwrite');
@@ -287,7 +288,7 @@ function indexedDBObj(){
     
     this.deleteAll = function (table = "", store_index ='by_id') {
         return new Promise((resolve, reject)=>{
-            let request = indexedDB.open(this.DB_NAME);
+            let request = indexedDB.open(this.DB_NAME, this.DB_VERSION);
             request.onsuccess = function () {
                 let db = request.result;
                 let transaction = db.transaction(table, 'readwrite');

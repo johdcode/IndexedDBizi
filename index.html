@@ -10,7 +10,21 @@
     <script>
         "use strict";
         const Db = new indexedDBObj();
-        // Db.installDB();
+        Db.init_parameters = [];
+        Db.init_parameters.push({ ///////////////////////////////// SMOKE
+            store: ['smoke', { keyPath: 'id', autoIncrement: true }],
+            index: [
+                ['by_id', 'id', { unique: true }],
+                ['by_size', 'size']
+            ],
+            init_data: [
+                { size: '16' }
+            ]
+        });
+        Db.DB_VERSION = 2;
+
+        Db.install();
+        
         // console.log(Db.index);
         // Db.set('muscle', { muscle_name: 'Bras' })
         //     .then((res) => {
