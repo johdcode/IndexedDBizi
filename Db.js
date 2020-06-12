@@ -12,55 +12,79 @@ function indexedDBObj(){
     
     this.DB_NAME = 'mabase';
 
+    this.store = [
+        ['jour', { keyPath: 'id', autoIncrement: true }],
+        ['muscle', { keyPath: 'id', autoIncrement: true }],
+        ['save', { keyPath: 'id', autoIncrement: true }],
+        ['jeune', { keyPath: 'id', autoIncrement: true }]
+    ];
+    this.index = {
+        'jour': [
+            ['by_date', 'date_jour', { unique: true }],
+            ['by_id', 'id', { unique: true }]
+        ],
+        'muscle': [
+            ['by_id', 'id', { unique: true }],
+            ['by_name', 'muscle_name', { unique: true }]
+        ],
+        'save': [
+            ['by_id', 'id', { unique: true }],
+            ['by_date', 'date_save', { unique: true }]
+        ],
+        'jeune': [
+            ['by_id', 'id', { unique: true }]
+        ]
+
+    };
+    this.init_data = {
+        'jour': [
+            { date_jour: "2020/04/26", poids: 0, muscle: 'Vide', debut_jeune: '2020-04-28T21:45:00.000', fin_jeune: '2020-04-29T15:21:00.000', remarque: "Remarque sur votre séance." },
+            { date_jour: "2020/04/25", poids: 0, muscle: 'Vide', debut_jeune: '2020-04-28T21:45:00.000', fin_jeune: '2020-04-29T15:21:00.000', remarque: "Remarque sur votre séance." },
+            { date_jour: "2020/04/27", poids: 0, muscle: 'Vide', debut_jeune: '2020-04-28T21:45:00.000', fin_jeune: '2020-04-29T15:21:00.000', remarque: "Remarque sur votre séance." }
+        ],
+        'muscle': [
+            { muscle_name: 'Triceps' },
+            { muscle_name: 'Biceps' },
+            { muscle_name: 'Pectoraux' },
+            { muscle_name: 'Dos' },
+            { muscle_name: 'Abdos' },
+            { muscle_name: 'Cuisse' },
+            { muscle_name: 'Fessier' },
+            { muscle_name: 'Mollets' }
+        ],
+        'save': [
+            { date_save: '2020-04-28T21:45:00.000', last_id: 1, last_date: '2020/04/25' }
+        ],
+        'jeune': [
+            { fast_duration: '16' }
+        ]
+    };
+
     /** INIT */
-    this.installDB = function() {
+    this.install = function() {
         // Ouvrir la base de données
         // Si elle n'existe pas, elle est créé
         let request = indexedDB.open(this.DB_NAME);
-    
-        request.onupgradeneeded = function () {
-            let db = request.result;
-            ////////////////////////////////// TABLE JOUR
-            // Creer la table 'jour', stocker par leurs numero
-            let store = db.createObjectStore('jour', { keyPath: 'id', autoIncrement: true });
-            // Creer un index
-            let date_index = store.createIndex('by_date', 'date_jour', { unique: true });
-            let jour_id_index = store.createIndex('by_id', 'id', { unique: true });
-    
-            store.put({ date_jour: "2020/04/25", poids: 0, muscle: 'Vide', debut_jeune: '2020-04-28T21:45:00.000', fin_jeune: '2020-04-29T15:21:00.000', remarque: "Remarque sur votre séance."});
-            store.put({ date_jour: "2020/04/26", poids: 0, muscle: 'Vide', debut_jeune: '2020-04-28T21:45:00.000', fin_jeune: '2020-04-29T15:21:00.000', remarque: "Remarque sur votre séance."});
-            store.put({ date_jour: "2020/04/27", poids: 0, muscle: 'Vide', debut_jeune: '2020-04-28T21:45:00.000', fin_jeune: '2020-04-29T15:21:00.000', remarque: "Remarque sur votre séance."});
-            ////////////////////////////////// TABLE MUSCLE
-            store = db.createObjectStore('muscle', { keyPath: 'id', autoIncrement: true });
-            let name_index = store.createIndex('by_name', 'muscle_name', { unique: true });
-            let muscle_id_index = store.createIndex('by_id', 'id', { unique: true });
-    
-            store.put({ muscle_name: 'Triceps' });
-            store.put({ muscle_name: 'Biceps' });
-            store.put({ muscle_name: 'Pectoraux' });
-            store.put({ muscle_name: 'Dos' });
-            store.put({ muscle_name: 'Abdos' });
-            store.put({ muscle_name: 'Cuisse' });
-            store.put({ muscle_name: 'Fessier' });
-            store.put({ muscle_name: 'Mollets' });
 
-            ////////////////////////////////// TABLE SAVE
-            store = db.createObjectStore('save', { keyPath: 'id', autoIncrement: true });
-            store.createIndex('by_id', 'id', { unique: true });
-            store.createIndex('by_date', 'date_save', { unique: true });
-    
-            store.put({ date_save: '2020-04-28T21:45:00.000', last_id: 1, last_date: '2020/04/25'});
-    
-            /////////////////////////////////// TABLE DUREE JEUNE
-            store = db.createObjectStore('jeune', { keyPath: 'id', autoIncrement: true });
-            store.createIndex('by_id', 'id', { unique: true });
-    
-            store.put({ fast_duration: '16'});
-    
+        request.onupgradeneeded = () => {
+            let db = request.result;
+            for(let sto of this.store){
+                // Create store
+                const store = db.createObjectStore(...sto);
+                // Create index
+                for (let index of this.index[ sto[0] ]){
+                    store.createIndex(...index);
+                }
+                // Create init data
+                for (let init_data of this.init_data[ sto[0] ]){
+                    // console.log(init_data); debugger;
+                    store.put(init_data);
+                }
+            }
             db.close();
         }
     }
-    this.installDB();
+    this.install();
     
     /** CREATE */
     this.set = function(table = "", data = {}) {

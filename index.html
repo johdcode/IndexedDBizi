@@ -10,43 +10,44 @@
     <script>
         "use strict";
         const Db = new indexedDBObj();
-
-        Db.set('muscle', { muscle_name: 'Bras' })
-            .then((res) => {
-                console.log('Set :');
-                console.log(res);
-            })
-            .catch((e) => {
-                console.log(e);
-            })
+        // Db.installDB();
+        // console.log(Db.index);
+        // Db.set('muscle', { muscle_name: 'Bras' })
+        //     .then((res) => {
+        //         console.log('Set :');
+        //         console.log(res);
+        //     })
+        //     .catch((e) => {
+        //         console.log(e);
+        //     })
         
-        Db.put('muscle', 2, { muscle_name: 'Occh' })
-                .then((res) => {
-                    console.log('Get (prev):');
-                    console.log(res);
-                });
+        // Db.put('muscle', 2, { muscle_name: 'Occh' })
+        //         .then((res) => {
+        //             console.log('Get (prev):');
+        //             console.log(res);
+        //         });
 
-        Db.getAll('muscle', 'by_name')
-            .then((res) => {
-                console.log('Get :');
-                console.log(res);
-            });
+        // Db.getAll('muscle', 'by_name')
+        //     .then((res) => {
+        //         console.log('Get :');
+        //         console.log(res);
+        //     });
 
-        Db.get('muscle', 'Dos', 'by_name')
-            .then((res) => {
-                console.log('Get :');
-                console.log(res);
-            });
-        Db.get('muscle', 'Dos', 'by_name', 'next')
-            .then((res) => {
-                console.log('Get (next):');
-                console.log(res);
-            });
-        Db.get('muscle', 'Dos', 'by_name', 'prev')
-            .then((res) => {
-                console.log('Get (prev):');
-                console.log(res);
-            });
+        // Db.get('muscle', 'Dos', 'by_name')
+        //     .then((res) => {
+        //         console.log('Get :');
+        //         console.log(res);
+        //     });
+        // Db.get('muscle', 'Dos', 'by_name', 'next')
+        //     .then((res) => {
+        //         console.log('Get (next):');
+        //         console.log(res);
+        //     });
+        // Db.get('muscle', 'Dos', 'by_name', 'prev')
+        //     .then((res) => {
+        //         console.log('Get (prev):');
+        //         console.log(res);
+        //     });
         // Db.deleteAll('muscle')
 
     </script>
