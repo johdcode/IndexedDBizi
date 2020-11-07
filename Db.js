@@ -12,6 +12,7 @@ function indexedDBObj(){
     
     this.DB_NAME = 'mabase';
     this.DB_VERSION = 1;
+    this.default_index_name = 'by_id';
 
     this.init_parameters = [
         { ///////////////////////////////// JOUR
@@ -62,7 +63,7 @@ function indexedDBObj(){
                 { fast_duration: '16' }
             ]
         }
-    ]
+    ];
 
     /** INIT */
     this.install = function() {
@@ -112,7 +113,7 @@ function indexedDBObj(){
     }
     
     /** READ */
-    this.get = function (table = "", key = "", store_index = 'by_id', position ='current') {
+    this.get = function (table = "", key = "", position = 'current', store_index = this.default_index_name) {
         return new Promise((resolve, reject)=>{
             let request = indexedDB.open(this.DB_NAME, this.DB_VERSION);
             request.onsuccess = function () {
@@ -185,7 +186,7 @@ function indexedDBObj(){
         })
     }
   
-    this.getFrom = function (table = "", key = "", store_index = 'by_id', direction = 'next') { 
+    this.getFrom = function (table = "", key = "", direction = 'next', store_index = this.default_index_name) { 
         return new Promise((resolve, reject) => {
             let request = indexedDB.open(this.DB_NAME, this.DB_VERSION);
 
@@ -226,21 +227,21 @@ function indexedDBObj(){
     }
     
     /** UPDATE */
-    this.put = function (table = "", key = "", data = {}, store_index = 'by_id') {
+    this.put = function (table = "", id = "", data = {}) {
         return new Promise((resolve, reject)=>{
             let request = indexedDB.open(this.DB_NAME, this.DB_VERSION);
             request.onsuccess = function () {
                 let db = request.result;
                 let transaction = db.transaction(table, 'readwrite');
                 let store = transaction.objectStore(table);
-                let index = store.index(store_index);
-                store.put({ id: key, ...data })
+
+                store.put({ id: id, ...data })
                     .onsuccess = function(){
-                        resolve(key);
+                        resolve(id);
                     }
-                transaction.onerror = function () {
-                        reject(e)
-                    }
+                transaction.onerror = function (e) {
+                    reject(e.target.error)
+                }
                 transaction.oncomplete = function () {
                         db.close()
                     }
@@ -249,7 +250,7 @@ function indexedDBObj(){
     }
     
     /** DELETE */
-    this.delete = function (table = "", key = "", store_index = 'by_id') {
+    this.delete = function (table = "", key = "", store_index = this.default_index_name) {
         return new Promise((resolve, reject)=>{
             let request = indexedDB.open(this.DB_NAME, this.DB_VERSION);
             request.onsuccess = function () {
@@ -258,6 +259,7 @@ function indexedDBObj(){
                 let store = transaction.objectStore(table);
                 let index = store.index(store_index);
                 
+                // Sans les 'cursor'
                 // store.delete(key)
                 //     .onsuccess = function(r){
                 //         resolve(r);
@@ -286,14 +288,15 @@ function indexedDBObj(){
         });
     }
     
-    this.deleteAll = function (table = "", store_index ='by_id') {
+    this.deleteAll = function (table = "") {
+        const parentThis = this;
         return new Promise((resolve, reject)=>{
             let request = indexedDB.open(this.DB_NAME, this.DB_VERSION);
             request.onsuccess = function () {
                 let db = request.result;
                 let transaction = db.transaction(table, 'readwrite');
                 let store = transaction.objectStore(table);
-                let index = store.index(store_index);
+                let index = store.index(parentThis.default_index_name);
 
                 let request2 = index.openCursor();
 
