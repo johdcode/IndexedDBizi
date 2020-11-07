@@ -9,22 +9,114 @@
     <script src="./Db.js"></script>
     <script>
         "use strict";
+
         const Db = new indexedDBObj();
-        Db.init_parameters = [];
-        Db.init_parameters.push({ ///////////////////////////////// SMOKE
-            store: ['smoke', { keyPath: 'id', autoIncrement: true }],
-            index: [
-                ['by_id', 'id', { unique: true }],
-                ['by_size', 'size']
-            ],
-            init_data: [
-                { size: '16' }
-            ]
-        });
-        Db.DB_VERSION = 2;
+        Db.DB_NAME = 'ma_base_de_donnees'
+        Db.DB_VERSION = 2
+
+        Db.init_parameters = [
+            {
+                /**
+                * 'store' permet de créer un table dans notre base de données.
+                * La propriété correspondante dans l'objet natif IDB est IDB.createObjectStore(), et est un tableau de valeurs désignant :
+                * - le nom de notre table, ici 'membre'
+                * - un objet paramétrant notre table :
+                *      - keyPath : la clé primaire autogénérée de notre table, ici 'id'
+                *      - autoIncrement : booléan permettant l'auto-incrément automatique pour chaque nouvel enregistrement
+                **/
+                store: ['membre', { keyPath: 'id', autoIncrement: true }],
+
+                /**
+                * 'index' permet de choisir les propriétés de la table qui serons placées en index afin de permettre leurs accès.
+                * La propriété correspondante dans l'objet natif IDB est IDB.createObjectStore().createIndex(), et est un tableau de valeurs. 
+                * Chaque valeur est un tableau où l'on précise :
+                * - le nom que l'on souhaite donnée à l'index, ici 'by_id'
+                * - la propriété affecté par cette index, ici 'id'
+                * - un objet paramétrant notre index :
+                *      - unique : la propiété 'id' en index doit être unique
+                **/
+                index: [
+                    ['by_id', 'id', { unique: true }],
+                    ['by_name', 'name', { unique: true }]
+                ],
+
+                /**
+                * 'init_data' permet de créer des enregistrements après la création de la table.
+                * La propriété correspondante dans l'objet natif IDB est IDB.createObjectStore().put(), et est un tableau de valeurs.
+                * Chaque valeur est un objet et précise au format JSON l'enregistrement sous forme de clé -> valeur :
+                * Notons que le format de la table n'est pas fixe, chaque enregistrement peux ignorer ou rajouter des propriétés en son sein. 
+                * Les seuls valeurs obligatoirs sont celles désignées en index.
+                **/
+                init_data: [
+                    { name: 'Bob', age : 54 },
+                    { name: 'Alice' },
+                    { name: 'John', age: 24, address: 'Nantes' }
+                ]
+            },
+        ]
 
         Db.install();
+
+        // SET
+        Db.set('membre', { name: 'Jean' })
+            .then((res) => {
+                // Affiche le résulat
+                console.log(res);
+            })
+            .catch((e) => {
+                // En cas d'erreur, affiche l'erreur
+                console.log(e);
+            })
         
+        // GET
+        // Utilise l'id
+        Db.get('membre', 1)
+            .then((res) => {
+                console.log(res);
+            });
+        // Utilise le champ 'name'
+        Db.get('membre', 'John', 'current', 'by_name')
+            .then((res) => {
+                console.log(res);
+            });
+        // Récupère l'enregistrement précedent le 'name' spécifié
+        Db.get('membre', 'John', 'prev', 'by_name')
+            .then((res) => {
+                console.log(res);
+            });
+        
+        // GET ALL
+        // Recupère tout les enregistrement ordonnés par le champs 'id'
+        Db.getAll('membre', 'by_id')
+            .then((res) => {
+                console.log(res);
+            });
+        // Recupère tout les enregistrement ordonnés par le champs 'name', dans l'ordre croissant
+        Db.getAll('membre', 'by_name')
+            .then((res) => {
+                console.log(res);
+            });
+
+        // GET FROM
+         Db.getFrom('membre', 2, 'next')
+            .then((res) => {
+                console.log(res);
+            });
+
+        // PUT
+        // Met à jour l'enregistrement id=2 de la table 'membre'
+        Db.put('membre', 2, { name: 'Chuck Noris' })
+            .then((res) => {
+                console.log(res);
+            });
+
+        // DELETE
+        Db.delete('membre', 'Jean', 'by_name')
+
+        // DELETE ALL
+        Db.deleteAll('membre')
+
+
         // console.log(Db.index);
         // Db.set('muscle', { muscle_name: 'Bras' })
         //     .then((res) => {
