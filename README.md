@@ -101,7 +101,6 @@ Notre base de données paramétrée, il est nous reste à exécuter l'installati
 ```
 
 Pour voir votre base de données, ouvrer le panneau d'outils de dévelopement de votre navigateur (Ctrl + Maj + I sur Chrome), et rendez-vous sur l'onglet Application, et chercher le sous-menu IndexedDB.
- [IMAGE outils de développement > Application > IndexedDB]
 
 ### set() - Ajouter un enregistrement dans une table
 ```Javascript
