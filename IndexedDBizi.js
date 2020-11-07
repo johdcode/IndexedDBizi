@@ -1,69 +1,19 @@
 /**
  * 
- *  INDEXEDDB - CRUD API
+ *  IndexedDBizi - CRUD API pour IndexedDB
  * 
- * Creer un object config, dans instllDb() dans lequel je peux paramétrer le "store_index"
  * 
  **/
 
 "use strict;"
 
-function indexedDBObj(){
+function IndexedDBizi(){
     
     this.DB_NAME = 'mabase';
     this.DB_VERSION = 1;
     this.default_index_name = 'by_id';
 
-    this.init_parameters = [
-        { ///////////////////////////////// JOUR
-            store : [ 'jour', { keyPath: 'id', autoIncrement: true } ],
-            index : [
-                ['by_date', 'date_jour', { unique: true }],
-                ['by_id', 'id', { unique: true }]
-            ],
-            init_data : [
-                { date_jour: "2020/04/26", poids: 0, muscle: 'Vide', debut_jeune: '2020-04-28T21:45:00.000', fin_jeune: '2020-04-29T15:21:00.000', remarque: "Remarque sur votre séance." },
-                { date_jour: "2020/04/25", poids: 0, muscle: 'Vide', debut_jeune: '2020-04-28T21:45:00.000', fin_jeune: '2020-04-29T15:21:00.000', remarque: "Remarque sur votre séance." },
-                { date_jour: "2020/04/27", poids: 0, muscle: 'Vide', debut_jeune: '2020-04-28T21:45:00.000', fin_jeune: '2020-04-29T15:21:00.000', remarque: "Remarque sur votre séance." }
-            ]
-        },
-        { ///////////////////////////////// MUSCLE
-            store: ['muscle', { keyPath: 'id', autoIncrement: true }],
-            index: [
-                ['by_id', 'id', { unique: true }],
-                ['by_name', 'muscle_name', { unique: true }]
-            ],
-            init_data: [
-                { muscle_name: 'Triceps' },
-                { muscle_name: 'Biceps' },
-                { muscle_name: 'Pectoraux' },
-                { muscle_name: 'Dos' },
-                { muscle_name: 'Abdos' },
-                { muscle_name: 'Cuisse' },
-                { muscle_name: 'Fessier' },
-                { muscle_name: 'Mollets' }
-            ]
-        },
-        { ///////////////////////////////// SAVE
-            store : ['save', { keyPath: 'id', autoIncrement: true }],
-            index : [
-                ['by_id', 'id', { unique: true }],
-                ['by_date', 'date_save', { unique: true }]
-            ],
-            init_data : [
-                { date_save: '2020-04-28T21:45:00.000', last_id: 1, last_date: '2020/04/25' }
-            ]
-        },
-        { ///////////////////////////////// JEUNE
-            store : ['jeune', { keyPath: 'id', autoIncrement: true }],
-            index : [
-                ['by_id', 'id', { unique: true }]
-            ],
-            init_data : [
-                { fast_duration: '16' }
-            ]
-        }
-    ];
+    this.init_parameters = [];
 
     /** INIT */
     this.install = function() {

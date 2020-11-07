@@ -14,12 +14,12 @@ Ce modèle permet une amélioration des performances en dépit cependant d'une p
 ## Limite de stockage
 Les politique de stockage diffèrent selon le navigateur:
 - **Firefox** n'as pas de limite de stockage, il demande juste une autorisation lorsque les données dépassent 50 Mo
-- **Chrome** limite est d'environs 4 Go de données stockées
+- **Chrome** limite à environs 4 Go de données stockées
 - **Internet Explorer** n'as pas non plus de limite, il demande une autorisation lorsque les données dépassent 10 Mo
 
 ## Utiliser IDBizi
 Bien différent du modèle relationnel des données utilisé dans MySQL, IDB peut parître austère au premier abord, avec son système utilisant un modèle NoSQL, comme MongoDB.
-Cette API a pour objectif de fournir un ensemble de méthodes basiques permettant un accès et une manipulation plus facile des données dans une base de données indéxée type IDB :
+Cette API a pour objectif de fournir un ensemble de méthodes basiques permettant un accès et une manipulation plus facile des données dans une base de données indéxées type IDB :
 
 - install()
 - set()
@@ -116,6 +116,7 @@ Cette méthode retourne l'id de l'objet inséré en base.
 ```Javascript
 // EXEMPLE
 
+// Insère dans la table 'membre'
 Db.set('membre', { name: 'Jean' })
     .then((res) => {
         // Affiche le résulat
@@ -269,3 +270,8 @@ Cette méthode retourne 0 si tous les enregistrements ont été supprimés.
 // Supprime tout les engistrement de la table 'membre'
 Db.deleteAll('membre')
 ```
+
+### Contribuer
+- Améliorer les messages d'erreurs retournés par les fonctions
+- Permettre un put() avec un autre champs que l'id
+- Ajouter une méthode deleteFrom()

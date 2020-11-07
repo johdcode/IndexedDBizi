@@ -6,11 +6,11 @@
     <title>Indexed Database API</title>
 </head>
 <body>
-    <script src="./Db.js"></script>
+    <script src="./IndexedDBizi.js"></script>
     <script>
         "use strict";
 
-        const Db = new indexedDBObj();
+        const Db = new IndexedDBizi();
         Db.DB_NAME = 'ma_base_de_donnees'
         Db.DB_VERSION = 2
 
@@ -114,48 +114,7 @@
         Db.delete('membre', 'Jean', 'by_name')
 
         // DELETE ALL
-        Db.deleteAll('membre')
-
-
-        // console.log(Db.index);
-        // Db.set('muscle', { muscle_name: 'Bras' })
-        //     .then((res) => {
-        //         console.log('Set :');
-        //         console.log(res);
-        //     })
-        //     .catch((e) => {
-        //         console.log(e);
-        //     })
-        
-        // Db.put('muscle', 2, { muscle_name: 'Occh' })
-        //         .then((res) => {
-        //             console.log('Get (prev):');
-        //             console.log(res);
-        //         });
-
-        // Db.getAll('muscle', 'by_name')
-        //     .then((res) => {
-        //         console.log('Get :');
-        //         console.log(res);
-        //     });
-
-        // Db.get('muscle', 'Dos', 'by_name')
-        //     .then((res) => {
-        //         console.log('Get :');
-        //         console.log(res);
-        //     });
-        // Db.get('muscle', 'Dos', 'by_name', 'next')
-        //     .then((res) => {
-        //         console.log('Get (next):');
-        //         console.log(res);
-        //     });
-        // Db.get('muscle', 'Dos', 'by_name', 'prev')
-        //     .then((res) => {
-        //         console.log('Get (prev):');
-        //         console.log(res);
-        //     });
-        // Db.deleteAll('muscle')
-
+        // Db.deleteAll('membre')
     </script>
 </body>
 </html>
