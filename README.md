@@ -4,6 +4,10 @@ IDB - Indexed Data Base
 ## Qu'est ce IDB ?
 IndexedDB est une API de bas niveau qui permet le stockage côté client de quantités importantes de données structurées, incluant des fichiers/blobs. Cette API utilise des index afin de permettre des recherches performantes sur ces données. Alors que Web Storage est utile pour stocker de petites quantités de données, il est moins utile pour stocker de grandes quantités de données structurées.
 
+[Indexed Database API 2.0](https://www.w3.org/TR/IndexedDB-2/)
+
+[IndexedDB- Référence Web API | MDN](https://developer.mozilla.org/fr/docs/Web/API/API_IndexedDB)
+
 ## Pourquoi utiliser IDB ?
 IndexedDB est conçu afin de permettre de stocker une grande quantité de données dans le navigateur client et d'y accéder de manière rapide, grâce à l'indexation.
 
